@@ -178,7 +178,7 @@ document.addEventListener('gesturestart', function(e) {
 
 
       var patch
-      $.get('pd/Untitled.pd', function(mainStr) {
+      $.get('pd/drums_v2.pd', function(mainStr) {
         // Loading the patch
         patch = Pd.loadPatch(mainStr)
 
