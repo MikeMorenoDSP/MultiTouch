@@ -46,7 +46,7 @@ background(255);
     
   }
   }
-  // get 1 touch xy and set flag to playing
+
   if (touches.length>0){
 
       x1 = touches[0].x;
@@ -54,13 +54,12 @@ background(255);
       noneFlag = 0;
     
   }
-  //turn off both playing flags
   else{
 
     noneFlag = 1;
     noneFlag2 = 1;
   }
- //  get 2nd touch xy and set flag to playing, start calculating distance
+
   if (touches.length>1){
 
       x2 = touches[1].x;
@@ -69,20 +68,19 @@ background(255);
       var d = distance(touches[0].x,touches[0].y,touches[1].x,touches[1].y);
   }
 
-//if touch 3 happens last one touched is the second cursor
+
   if (touches.length>2){
     x2 = touches[touches.length-1].x;
     y2 = touches[touches.length-1].y;
     noneFlag2 = 0;
 }
-//make sure 2nd touch is off if no touches
+
   if (touches.length==0){
     // noneFlag = 1;
      noneFlag2 = 1;
 
     
 }
-//start sizeA fading variable on 1st touch 
 if (noneFlag==0){
   sizeA=sizeA+2;
      
@@ -100,14 +98,10 @@ else{
     strokeWeight(1);
     ellipse(x1, y1, sizeA, sizeA);
 }
-
-//draw line if two touches
 if(noneFlag==0&&noneFlag2==0){
   stroke(0,0,0, sizeB);
   line(x1, y1, x2, y2);
   }
-
- //start sizeB fading variable on 2nd touch  
 if (noneFlag2==0){
   
   
@@ -131,15 +125,19 @@ else{
 
 
 
+// Distance
+  var mapD = mapRange([0,5000],[0,1],d);
+// Touch X
+  var x1m = mapRange ([0,width],[0,1],x1);
+  var x2m = mapRange ([0,width],[0,1],x2);
+// Touch Y
+  var y1m = mapRange ([0,height],[1,0],y1);
+  var y2m = mapRange ([0,height],[1,0],y2);
 
-  var mapD = mapRange([0,3000],[1,200],d);
-  var x1m = mapRange ([0,width],[0,9000],x1);
-  var x2m = mapRange ([0,width],[0,9000],x2);
-
-  Pd.send('freq',[parseFloat(y1)]);
-  Pd.send('freq2',[parseFloat(y2)]);
-  Pd.send('filter',[parseFloat(x1m)]);
-  Pd.send('filter2',[parseFloat(x2m)]);
+  Pd.send('y-axis',[parseFloat(y1m)]);
+  Pd.send('y-axis.2',[parseFloat(y2m)]);
+  Pd.send('x-axis',[parseFloat(x1m)]);
+  Pd.send('x-axis.2',[parseFloat(x2m)]);
   Pd.send('d',[parseFloat(mapD)]);
 
   //if no notes are on 
@@ -151,10 +149,10 @@ else{
   }
 
   if(noneFlag2 == true){
-    Pd.send('off2',[parseFloat(1)]);
+    Pd.send('off.2',[parseFloat(1)]);
    }
    else{
-     Pd.send('on2',[parseFloat(1)]);
+     Pd.send('on.2',[parseFloat(1)]);
    }
 
   push();
@@ -178,7 +176,8 @@ document.addEventListener('gesturestart', function(e) {
 
 
       var patch
-      $.get('pd/drums_v2.pd', function(mainStr) {
+      // Name of the patch
+      $.get('pd/drums_v1.pd', function(mainStr) {
         // Loading the patch
         patch = Pd.loadPatch(mainStr)
 
